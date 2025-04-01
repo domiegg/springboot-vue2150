@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.QingjiaDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.xs_types as xsTypes
+        ,a.xy_types as xyTypes
+        ,a.zy_types as zyTypes
+        ,a.bj_types as bjTypes
+        ,a.qj_types as qjTypes
+        ,a.start_time as startTime
+        ,a.finish_time as finishTime
+        ,a.sp_types as spTypes
+        ,a.notice_content as noticeContent
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.QingjiaView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Qingjia  a
+        <where>
+            <if test=" params.xsTypes != '' and params.xsTypes != null and params.xsTypes != 'null' ">
+                and a.xs_types = #{params.xsTypes}
+            </if>
+            <if test=" params.xyTypes != '' and params.xyTypes != null and params.xyTypes != 'null' ">
+                and a.xy_types = #{params.xyTypes}
+            </if>
+            <if test=" params.zyTypes != '' and params.zyTypes != null and params.zyTypes != 'null' ">
+                and a.zy_types = #{params.zyTypes}
+            </if>
+            <if test=" params.bjTypes != '' and params.bjTypes != null and params.bjTypes != 'null' ">
+                and a.bj_types = #{params.bjTypes}
+            </if>
+            <if test=" params.qjTypes != '' and params.qjTypes != null and params.qjTypes != 'null' ">
+                and a.qj_types = #{params.qjTypes}
+            </if>
+            <if test=" params.startTimeStart != '' and params.startTimeStart != null and params.startTimeStart != 'null' ">
+                and a.start_time = #{params.startTimeStart}
+                <![CDATA[  and DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%T:%s') &gt;=
+                DATE_FORMAT(#{params.startTimeStart}, '%Y-%m-%d %H:%T:%s')   ]]>
+            </if>
+            <if test=" params.startTimeEnd != '' and params.startTimeEnd != null and params.startTimeEnd != 'null' ">
+                and a.start_time = #{params.startTimeEnd}
+                <![CDATA[  and DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%T:%s') &lt;=
+                DATE_FORMAT(#{params.startTimeEnd} , '%Y-%m-%d %H:%T:%s')    ]]>
+            </if>
+            <if test=" params.finishTimeStart != '' and params.finishTimeStart != null and params.finishTimeStart != 'null' ">
+                and a.finish_time = #{params.finishTimeStart}
+                <![CDATA[  and DATE_FORMAT(a.finish_time, '%Y-%m-%d %H:%T:%s') &gt;=
+                DATE_FORMAT(#{params.finishTimeStart}, '%Y-%m-%d %H:%T:%s')   ]]>
+            </if>
+            <if test=" params.finishTimeEnd != '' and params.finishTimeEnd != null and params.finishTimeEnd != 'null' ">
+                and a.finish_time = #{params.finishTimeEnd}
+                <![CDATA[  and DATE_FORMAT(a.finish_time, '%Y-%m-%d %H:%T:%s') &lt;=
+                DATE_FORMAT(#{params.finishTimeEnd} , '%Y-%m-%d %H:%T:%s')    ]]>
+            </if>
+            <if test=" params.spTypes != '' and params.spTypes != null and params.spTypes != 'null' ">
+                and a.sp_types = #{params.spTypes}
+            </if>
+            <if test=" params.noticeContent != '' and params.noticeContent != null and params.noticeContent != 'null' ">
+                and a.notice_content like CONCAT('%',#{params.noticeContent},'%')
+            </if>
+            <if test=" params.yh != '' and params.yh != null">
+                and a.xs_types = #{params.yh}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
